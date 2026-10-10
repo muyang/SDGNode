@@ -10,5 +10,6 @@ __pycache__/
 
 # 日志与系统杂项
 *.log
+*.bundle
 .DS_Store
 Thumbs.db
