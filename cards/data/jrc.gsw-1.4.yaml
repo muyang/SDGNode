@@ -1,0 +1,50 @@
+# SDGNode 首批卡 · 全球专题产品（管线 2）—— SDG 6.6.1 官方数据源
+geocard_version: "1.0"
+id: sdg.data.jrc.gsw-1.4
+type: data
+name: JRC Global Surface Water v1.4（1984–2021 全球水体变化）
+description: >-
+  欧委会联合研究中心全球地表水数据集 v1.4：30 m 分辨率 1984 年以来水体出现度、
+  逐年范围与变化类型（新增/消失/季节/永久）。SDG 6.6.1（水相关生态系统面积变化）
+  的官方推荐数据源。
+tags: [water, global, long-term-archive, jrc, "sdg:6", official-sdg-source]
+spatial:
+  bbox: [-180, -60, 180, 84]
+  crs: "EPSG:4326"
+  resolution: 30
+temporal:
+  start: "1984-01-01T00:00:00Z"
+  end: "2021-12-31T23:59:59Z"
+  interval: "P1Y"
+bands:
+  - {name: occurrence, dtype: uint8, units: "%", description: "1984-2021 水体出现度"}
+  - {name: change, dtype: int8, units: class, description: "变化类型（1-6）"}
+  - {name: extent, dtype: uint8, units: class, description: "逐年水体范围"}
+  - {name: transition, dtype: uint8, units: class, description: "2019→2021 转变类型"}
+capabilities: [water-extent, water-extent-change, change-detection]
+access:
+  protocol: https
+  endpoint: "https://global-surface-water.appspot.com/download"
+  auth: none
+  format: GeoTIFF
+provenance:
+  provider: "EC JRC / Google Earth Engine"
+  source: "https://global-surface-water.appspot.com"
+  lineage: "Landsat 5/7/8 全档案像素级分类（Pekel et al. 2016, Nature）；v1.4 覆盖至 2021"
+license: "CC-BY-4.0"
+compliance:
+  sovereignty: EU
+  sensitivity: public
+trust:
+  verified: true
+  score: 0.97
+rendering:
+  min: 0
+  max: 100
+  colormap: bluetone
+"geonexus:sdg":
+  goals: [6]
+  indicators: ["6.6.1"]
+  custodian: "EC JRC（SDG 6.6.1 数据保管方）"
+  unit: "proportion / km2"
+  spatial_disaggregation: [grid-30m, national, subnational, basin]

@@ -1,0 +1,18 @@
+# SDGNode ID 命名规范 v0（技术方案 §4.1）
+# 前提：SDK GeoCard schema 要求 id 匹配 ^[A-Za-z0-9][A-Za-z0-9._-]*$（不允许空格/冒号）。
+version: "0"
+id_patterns:
+  data: 'sdg\.data\.[a-z0-9-]+\.[a-z0-9.-]+'            # sdg.data.<provider>.<product>[-<version>]
+  model: 'sdg\.model\.[a-z0-9-]+\.[a-z0-9.-]+'          # sdg.model.<family>.<variant>
+  skill: 'sdg\.skill\.[a-z0-9-]+\.[a-z0-9-]+'           # sdg.skill.<domain>.<name>
+  knowledge: '(sdg\.knowledge\.[a-z0-9-]+\.[a-z0-9.-]+|report\.[A-Za-z0-9._-]+)'  # sdg.knowledge.<source>.<topic>；report.* 为 GAAG report_card_from_run 生成的运行产物卡
+  compute: 'sdg\.compute\.[a-z0-9-]+\.[a-z0-9-]+'       # sdg.compute.<site>.<pool>
+  agent: 'sdg\.agent\.[a-z0-9-]+\.[a-z0-9-]+'           # sdg.agent.<owner>.<name>（P4 启用）
+  workflow: '(sdg\.workflow|geocard\.case)\.[a-z0-9.-]+' # 案例卡沿 SDK 示例风格
+recipe_address: 'recipe://sdg/[a-z0-9-]+@[0-9]+\.[0-9]+\.[0-9]+'
+conventions:
+  - 数据卡 id 带产品版本后缀（如 worldcover-2024、hansen-gfc-1.12），版本漂移由 recipe_ref.data_snapshot 记录
+  - API 统计源数据卡与伴生 fetch skill 成对：sdg.data.<ns>.<product> ↔ sdg.skill.stats.fetch-<ns>
+  - 指标知识卡：sdg.knowledge.unsd.indicator-<x.y.z>
+  - 案例卡：geocard.case.sdg-<indicator-slug>-<region>-<year>
+  - 模型卡：权重版本/镜像 digest 写入 provenance.lineage，不进 id

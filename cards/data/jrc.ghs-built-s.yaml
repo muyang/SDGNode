@@ -1,0 +1,42 @@
+# SDGNode 首批卡 · 全球专题产品（管线 2）—— SDG 11.3.1 官方推荐（GHSL）
+geocard_version: "1.0"
+id: sdg.data.jrc.ghs-built-s
+type: data
+name: JRC GHSL GHS-BUILT-S R2023A（全球建成区面积，多时相）
+description: >-
+  全球人居层（GHSL）建成区表面产品 R2023A：10 m 分辨率、1975–2030 每 5 年一期的
+  建成面积（m²/像元）。SDG 11.3.1（土地消耗率/人口增长率）分子分量的官方推荐源。
+tags: [built-up, urban, global, ghsl, jrc, multi-epoch, "sdg:11", official-sdg-source]
+spatial:
+  bbox: [-180, -60, 180, 84]
+  crs: "EPSG:4326"
+  resolution: 10
+temporal:
+  start: "1975-01-01T00:00:00Z"
+  end: "2030-12-31T00:00:00Z"
+  interval: "P5Y"
+bands:
+  - {name: built_surface, dtype: uint16, units: "m2/pixel", description: "建成区表面积（多时相层）"}
+capabilities: [built-up-extent, impervious-surface, urban-morphology, land-cover-change]
+access:
+  protocol: https
+  endpoint: "https://ghsl.jrc.ec.europa.eu/download.php?ds=builts"
+  auth: none
+  format: COG
+provenance:
+  provider: "EC JRC"
+  source: "https://ghsl.jrc.ec.europa.eu/ghs_buils2023.php"
+  lineage: "Landsat/Sentinel-2 多时相深度学习提取；R2023A 版本（1975-2030 五年间隔，2030 为预测）"
+license: "CC-BY-4.0"
+compliance:
+  sovereignty: EU
+  sensitivity: public
+trust:
+  verified: true
+  score: 0.96
+"geonexus:sdg":
+  goals: [11, 9]
+  indicators: ["11.3.1", "11.1.1"]
+  custodian: "EC JRC / UN-Habitat（11.3.1）"
+  unit: "m2/pixel"
+  spatial_disaggregation: [grid-10m, city, national]

@@ -1,0 +1,45 @@
+# SDGNode 首批卡 · 全球专题产品（管线 2：文件/AWS 开放数据引用卡）
+geocard_version: "1.0"
+id: sdg.data.esa.worldcover-2024
+type: data
+name: ESA WorldCover 2024（10 m 全球土地覆盖）
+description: >-
+  ESA WorldCover 10 m 全球土地覆盖产品 2024 版（11 类：树冠/灌木/草/作物/建成/裸地-稀疏植被/
+  雪冰/红树林/湿地/水体/永久作物）。SDG 11.3.1 / 15.1.1 / 15.3.1 土地覆盖分量的推荐源之一。
+tags: [land-cover, global, 10m, esa, "sdg:11", "sdg:15"]
+spatial:
+  bbox: [-180, -60, 180, 84]
+  crs: "EPSG:4326"
+  resolution: 10
+temporal:
+  start: "2024-01-01T00:00:00Z"
+  end: "2024-12-31T23:59:59Z"
+  interval: "P1Y"
+bands:
+  - {name: map, dtype: uint8, units: class, description: "11 类土地覆盖分类码（10-100）"}
+capabilities: [land-cover, land-cover-change]
+access:
+  protocol: s3
+  endpoint: "s3://esa-worldcover/v300/2024/Map"
+  auth: none
+  format: COG
+provenance:
+  provider: "ESA / VITO"
+  source: "https://esa-worldcover.org"
+  lineage: "Sentinel-1/2 融合深度学习分类；版本序列 2020(v100)→2021(v200)→2024(v300)；recipe data_snapshot 记录使用版本"
+license: "CC-BY-4.0"
+compliance:
+  sovereignty: EU
+  sensitivity: public
+trust:
+  verified: true
+  score: 0.95
+rendering:
+  min: 10
+  max: 100
+  colormap: esa-worldcover
+"geonexus:sdg":
+  goals: [11, 15]
+  indicators: ["11.3.1", "15.1.1", "15.3.1"]
+  custodian: ESA
+  spatial_disaggregation: [grid-10m, national, subnational]

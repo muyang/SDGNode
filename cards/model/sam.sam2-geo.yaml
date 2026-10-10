@@ -1,0 +1,44 @@
+# SDGNode 首批卡 · model（管线 4；GPU 提示式分割，samgeo 封装）
+geocard_version: "1.0"
+id: sdg.model.sam.sam2-geo
+type: model
+name: samgeo（SAM2 地理空间封装）提示式分割模型
+description: >-
+  Segment Anything Model 2 的地理空间封装（segment-geospatial/samgeo）：支持点/框/文本
+  提示与自动全图分割，输入栅格影像，输出矢量掩膜。SDG 用途：水体提取（6.6.1 辅助）、
+  建成区/绿地勾绘（11.7.1）、灾害损毁范围快速勾绘（13.1.1）。同步推理（InferenceProvider）。
+tags: [segmentation, sam2, prompt-based, gpu, "sdg:6", "sdg:11", "sdg:13"]
+capabilities: [segmentation, water-extent, built-up-extent, greenspace-ratio, change-detection]
+interface:
+  type: inference-http
+  version: "1.0"
+inputs:
+  - {name: image, type: raster, required: true, description: "输入影像（COG 路径或 URL；建议 ≤ 4096×4096，超幅由调用方分块）"}
+  - {name: prompts, type: object, required: false, description: "{points:[[x,y,label]...], boxes:[[w,s,e,n]...], text:'water'}；全空则自动分割"}
+  - {name: output_mode, type: string, required: false, description: "vector(默认) | raster"}
+outputs:
+  - {name: masks_vector, type: vector, description: "分割掩膜 GeoJSON"}
+  - {name: masks_raster, type: raster, description: "output_mode=raster 时的掩膜栅格"}
+runtime:
+  cpu: 8
+  memory: "32Gi"
+  gpu: "1xT4"
+access:
+  protocol: https            # → InferenceProvider
+  endpoint: "http://sdg-model-node:8801/samgeo/invoke"
+  auth: apikey
+provenance:
+  provider: "Meta AI（SAM2）/ Qiusheng Wu 等（samgeo 封装）"
+  source: "https://github.com/opengeos/segment-geospatial"
+  lineage: "SAM2 (arXiv:2408.00714, Apache-2.0)；samgeo 封装版本与镜像 digest 部署时写入"
+license: "Apache-2.0"
+compliance:
+  sovereignty: US
+  sensitivity: public
+trust:
+  verified: false     # P2 部署后置 true
+  score: 0.8
+"geonexus:sdg":
+  goals: [6, 11, 13]
+  indicators: ["6.6.1", "11.7.1", "13.1.1"]
+  custodian: "SDGNode 模型仓库"

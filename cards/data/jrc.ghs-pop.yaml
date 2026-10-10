@@ -1,0 +1,42 @@
+# SDGNode 首批卡 · 全球专题产品（管线 2）—— SDG 11.3.1 官方推荐（GHSL）
+geocard_version: "1.0"
+id: sdg.data.jrc.ghs-pop
+type: data
+name: JRC GHSL GHS-POP R2023A（全球格点人口，多时相）
+description: >-
+  全球人居层人口产品 R2023A：100 m 分辨率、1975–2030 每 5 年一期的常住人口格点数
+  （基于普查 + dasymetric 分解至建成区）。SDG 11.3.1 人口增长率分量与暴露度分析的分母源。
+tags: [population, global, ghsl, jrc, multi-epoch, dasymetric, "sdg:11", "sdg:1", "sdg:3"]
+spatial:
+  bbox: [-180, -60, 180, 84]
+  crs: "EPSG:4326"
+  resolution: 100
+temporal:
+  start: "1975-01-01T00:00:00Z"
+  end: "2030-12-31T00:00:00Z"
+  interval: "P5Y"
+bands:
+  - {name: population_count, dtype: float32, units: persons, description: "格点常住人口（多时相层）"}
+capabilities: [population-grid, dasymetric-disaggregation, exposure-overlay]
+access:
+  protocol: https
+  endpoint: "https://ghsl.jrc.ec.europa.eu/download.php?ds=pop"
+  auth: none
+  format: COG
+provenance:
+  provider: "EC JRC"
+  source: "https://ghsl.jrc.ec.europa.eu/ghs_pop2023.php"
+  lineage: "各国普查 + CIESIN GPWv4 锚点 + 建成区/夜光约束的 dasymetric 分解；R2023A"
+license: "CC-BY-4.0"
+compliance:
+  sovereignty: EU
+  sensitivity: public
+trust:
+  verified: true
+  score: 0.95
+"geonexus:sdg":
+  goals: [1, 3, 11, 13]
+  indicators: ["11.3.1", "1.1.1", "3.9.1", "11.5.1", "13.1.1"]
+  custodian: "EC JRC"
+  unit: persons
+  spatial_disaggregation: [grid-100m, city, national]

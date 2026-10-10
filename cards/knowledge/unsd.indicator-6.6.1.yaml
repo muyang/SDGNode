@@ -1,0 +1,50 @@
+# SDGNode 首批卡 · knowledge（指标定义 = GeoAgent 的"指标→能力"路由表）
+geocard_version: "1.0"
+id: sdg.knowledge.unsd.indicator-6.6.1
+type: knowledge
+name: SDG 6.6.1 指标定义与计算方法（水相关生态系统范围的时间变化）
+description: >-
+  UNSD 官方口径：6.6.1 = 水相关生态系统（河流/湖泊/湿地/河口/含水层）范围随时间的
+  变化（相对基期的比例，正为扩展、负为收缩）。保管机构 UNEP（数据源：EC JRC
+  Global Surface Water）。评估单元：水体像元集合，按国家/流域汇总。
+  本卡路由到 GSW 数据卡 + 水体变化算子 + Sentinel-1/2 补充分辨率。
+tags: [indicator-definition, unsd, water, ecosystems, "sdg:6", routing]
+interface:
+  type: indicator-definition
+  version: "2025"
+capabilities: [indicator-query]
+access:
+  protocol: https
+  endpoint: "https://unstats.un.org/sdgs/metadata/files/?indicator=6.6.1"
+  auth: none
+  format: HTML
+provenance:
+  provider: "UNSD / UNEP"
+  source: "https://unstats.un.org/sdgs/metadata/"
+  lineage: "UNSD 元数据仓库 2025 版；JRC GSW 方法学（Pekel et al. 2016）；SDGNode 摘编"
+license: "CC-BY-4.0"
+compliance:
+  sovereignty: intl
+  sensitivity: public
+trust:
+  verified: true
+  score: 0.99
+"geonexus:sdg":
+  goals: [6]
+  indicators: ["6.6.1"]
+  tier: "I"
+  custodian: UNEP
+  unit: proportion
+  disaggregation: ["ecosystem-type", "water-body-class"]
+  spatial_disaggregation: [grid-30m, national, basin]
+  requires_capabilities:
+    - water-extent
+    - water-extent-change
+    - change-detection
+    - zonal-statistics
+    - report-render
+  related_cards:
+    - sdg.data.jrc.gsw-1.4
+    - sdg.data.copernicus.sentinel-1-grd
+    - sdg.data.copernicus.sentinel-2-l2a
+    - sdg.model.sam.sam2-geo

@@ -1,0 +1,47 @@
+# 管线 3 · API 数据源清单：GBIF 生物多样性出现记录
+source_version: "1.0"
+provider: GBIF
+namespace: gbif
+product: occurrence
+name: "GBIF 物种出现记录（Occurrence）"
+description: >-
+  全球生物多样性信息网络：20 亿+ 物种出现记录（标本、观测、公民科学），
+  支撑 SDG 14/15 的物种分布与红色名录指数评估。点数据（vector 语义），按查询窗口提取。
+api:
+  base_url: "https://api.gbif.org/v1/occurrence/search"
+  auth: none
+  response_format: "JSON/DwC-A"
+  docs: "https://www.gbif.org/developer/occurrence"
+coverage:
+  columns: [speciesKey, scientificName, taxonRank, country, countryCode, decimalLatitude, decimalLongitude, eventDate, year, basisOfRecord, license]
+  record_count: 2600000000
+  spatial_key: decimalLatitude/decimalLongitude
+  time_key: eventDate
+  update_interval: P1M
+sdg:
+  goals: [14, 15]
+  custodian: GBIF
+  tier: unclassified
+license:
+  name: "GBIF Data Sharing Agreement (record-level licenses vary)"
+  url: "https://www.gbif.org/terms"
+compliance:
+  sovereignty: intl
+  sensitivity: public
+  restrictions: ["record-level-license-check"]
+skill:
+  id: fetch-gbif
+  name: "GBIF 出现记录提取"
+  description: "按类群/国家/时间窗/bbox 查询 GBIF occurrence API，输出 GeoJSON（分页聚合，敏感物种坐标按 GBIF 规则已模糊化）。"
+  node_endpoint: "http://sdg-biodiv-node:8787"
+  inputs:
+    - {name: taxon_key, type: number, required: false, description: "GBIF usageKey；与 scientific_name 二选一"}
+    - {name: scientific_name, type: string, required: false}
+    - {name: country, type: string, required: false, description: "ISO alpha-2"}
+    - {name: bbox, type: array, required: false, description: "[west,south,east,north]"}
+    - {name: year_start, type: number, required: false}
+    - {name: year_end, type: number, required: false}
+    - {name: basis_of_record, type: string, required: false, description: "如 HUMAN_OBSERVATION"}
+  outputs:
+    - {name: occurrences_geojson, type: file}
+    - {name: summary_csv, type: file, description: "记录数/年代/基础类型汇总"}

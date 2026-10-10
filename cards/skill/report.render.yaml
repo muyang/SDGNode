@@ -1,0 +1,36 @@
+# SDGNode 首批卡 · skill（公共算子：SDG 报告渲染，tpl.sdg-report 模板）
+geocard_version: "1.0"
+id: sdg.skill.report.render
+type: skill
+name: SDG 指标评估报告渲染（tpl.sdg-report）
+description: >-
+  按 SDGNode 报告模板渲染指标评估报告：指标口径说明、数据快照、方法与参数、
+  结果图表、不确定性声明、来源四件套（run/recipe/params/data_snapshot）。
+  输出 HTML/PDF/DOCX；运行产物随后由 report_card_from_run 注册为 knowledge 卡
+  （report 合约：checksum + 来源四件套，缺一不可入册）。
+tags: [report, template, governance, public-operator]
+interface:
+  type: geomcp-skill
+  version: "1.0"
+capabilities: [report-render]
+inputs:
+  - {name: context, type: object, required: true, description: "报告上下文 {title, indicator, params, values, figures, snapshot, uncertainty}"}
+  - {name: template, type: string, required: false, description: "模板 id，默认 tpl.sdg-report"}
+  - {name: format, type: string, required: false, description: "html(默认) | pdf | docx"}
+outputs:
+  - {name: report, type: file, description: "报告文件（media_type 由 format 决定）"}
+access:
+  protocol: geomcp
+  endpoint: "http://sdg-analysis-node:8787"
+  auth: apikey
+provenance:
+  provider: SDGNode
+  source: "Jinja2 + Quarto/WeasyPrint 封装"
+  lineage: "P1 交付；模板 tpl.sdg-report v0 随本卡冻结"
+license: "Apache-2.0"
+compliance:
+  sovereignty: local-node
+  sensitivity: public
+trust:
+  verified: false
+  score: 0.7

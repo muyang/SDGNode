@@ -1,0 +1,53 @@
+# SDGNode 首批卡 · knowledge（指标定义 = GeoAgent 的"指标→能力"路由表）
+geocard_version: "1.0"
+id: sdg.knowledge.unsd.indicator-11.3.1
+type: knowledge
+name: SDG 11.3.1 指标定义与计算方法（土地消耗率与人口增长率之比）
+description: >-
+  UNSD 官方口径：11.3.1 = 土地消耗率（LCR，建成区年均扩张速度）÷ 人口增长率（PGR）。
+  保管机构 UN-Habitat，Tier I。推荐数据源：GHSL（GHS-BUILT-S + GHS-POP）。
+  本卡是自然语言规划的路由入口：GeoAgent 由目标语句命中本卡 →
+  requires_capabilities → registry 检索 data/model/skill 卡 → 组 DAG。
+tags: [indicator-definition, unsd, urban, "sdg:11", routing]
+interface:
+  type: indicator-definition
+  version: "2025"
+capabilities: [indicator-query]
+access:
+  protocol: https
+  endpoint: "https://unstats.un.org/sdgs/metadata/files/?indicator=11.3.1"
+  auth: none
+  format: HTML
+provenance:
+  provider: "UNSD / UN-Habitat"
+  source: "https://unstats.un.org/sdgs/metadata/"
+  lineage: "UNSD 指标元数据仓库 2025 版；SDGNode 摘编并绑定能力词表 v0"
+license: "CC-BY-4.0"
+compliance:
+  sovereignty: intl
+  sensitivity: public
+trust:
+  verified: true
+  score: 0.99
+"geonexus:sdg":
+  goals: [11]
+  indicators: ["11.3.1"]
+  tier: "I"
+  custodian: "UN-Habitat"
+  unit: ratio
+  disaggregation: ["urban-rural", "city-size"]
+  spatial_disaggregation: [city, national]
+  requires_capabilities:
+    - built-up-extent
+    - population-grid
+    - raster-preprocess
+    - lcrpgr
+    - report-render
+  related_cards:
+    - sdg.data.jrc.ghs-built-s
+    - sdg.data.jrc.ghs-pop
+    - sdg.data.boundary.chn-cities
+    - sdg.skill.raster.clip-stack
+    - sdg.skill.urban.lcrpgr
+    - sdg.skill.report.render
+    - "recipe://sdg/11-3-1-lcrpgr@1.0.0"

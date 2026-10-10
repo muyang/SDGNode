@@ -1,0 +1,38 @@
+# SDGNode P1 预置卡（draft）· 案例卡/Recipe 的引用完整性依赖本卡
+# 数据源：全国地理信息资源目录服务系统（webmap.cn）/ DataV.GeoAtlas 城市边界
+geocard_version: "1.0"
+id: sdg.data.boundary.chn-cities
+type: data
+name: 中国城市行政边界（市级，2024.12 版）
+description: >-
+  中国地级及以上城市行政边界矢量（GeoJSON，含市辖区），来源为国家基础地理信息
+  公开目录服务。作为指标评估的空间分析单元（AOI 提取 + 栅格化掩膜）。
+  注意：涉密比例尺与边界画法须遵守国内测绘法规；本卡仅含公开市级边界。
+tags: [boundary, administrative, china, vector, aoi, draft-p1]
+spatial:
+  bbox: [73.5, 3.8, 135.1, 53.6]
+  crs: "EPSG:4326"
+capabilities: [administrative-boundary]
+access:
+  protocol: https
+  endpoint: "https://www.webmap.cn/main.do?method=index"
+  auth: none
+  format: GeoJSON
+provenance:
+  provider: "国家基础地理信息中心（公开目录服务）"
+  source: "https://www.webmap.cn/main.do?method=index"
+  lineage: "2024.12 版公开市级边界整理；GCJ-02/WGS-84 偏移核对记录于 handler 文档"
+license:
+  name: "公开地理信息数据（须署名，遵守测绘法规）"
+  url: "https://www.webmap.cn/main.do?method=index"
+compliance:
+  sovereignty: CN
+  restrictions: ["attribution-required", "surveying-law-compliance"]
+  sensitivity: public
+trust:
+  verified: false
+  score: 0.8
+"geonexus:sdg":
+  goals: [11]
+  indicators: ["11.3.1", "11.7.1"]
+  spatial_disaggregation: [city, subnational, national]

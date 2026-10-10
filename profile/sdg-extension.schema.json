@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sdgnode.local/profile/sdg-extension.schema.json",
+  "title": "SDGNode geonexus:sdg 扩展（GeoCard 顶层扩展字段）",
+  "description": "校验 GeoCard 顶层 'geonexus:sdg' 扩展对象。依赖 GeoCard 1.0 顶层 additionalProperties:true 的加法式扩展政策，不修改 SDK schema。CI 中与 SDK geocard.schema.json 叠加校验。",
+  "type": "object",
+  "properties": {
+    "goals": {
+      "type": "array",
+      "items": { "type": "integer", "minimum": 1, "maximum": 17 },
+      "uniqueItems": true,
+      "description": "SDG 目标号（1–17）"
+    },
+    "indicators": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+      "uniqueItems": true,
+      "description": "UNSD 指标编号（唯一指标口径），如 15.3.1"
+    },
+    "tier": {
+      "type": "string",
+      "enum": ["I", "II", "III", "mixed", "unclassified"],
+      "description": "联合国指标分级（Tier I/II/III；多指标源用 mixed）"
+    },
+    "custodian": {
+      "type": "string",
+      "description": "指标保管机构（UNSD/FAO/UN-Habitat/UNCCD…）"
+    },
+    "unit": {
+      "type": "string",
+      "description": "计量单位（proportion/ratio/km2/…）"
+    },
+    "disaggregation": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "统计分解维度（sex/age/urban-rural/income…）"
+    },
+    "spatial_disaggregation": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "空间分解粒度（national/subnational/city/grid-1km…）"
+    },
+    "requires_capabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "计算该指标所需的能力（能力词表 v0 术语）——GeoAgent/LLM planner 的指标→能力路由表"
+    },
+    "related_cards": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9._:/@-]*$" },
+      "description": "关联资产卡 id 或 recipe 地址（recipe://sdg/name@semver）"
+    },
+    "source_manifest": {
+      "type": "string",
+      "description": "生成该卡的 source manifest 路径（管线 3 工厂产物追溯）"
+    }
+  },
+  "additionalProperties": false
+}

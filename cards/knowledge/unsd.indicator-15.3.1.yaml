@@ -1,0 +1,52 @@
+# SDGNode 首批卡 · knowledge（指标定义 = GeoAgent 的"指标→能力"路由表）
+geocard_version: "1.0"
+id: sdg.knowledge.unsd.indicator-15.3.1
+type: knowledge
+name: SDG 15.3.1 指标定义与计算方法（退化土地占土地总面积的比例）
+description: >-
+  UNSD 官方口径：15.3.1 = 退化土地面积 / 土地总面积。UNCCD LDN 三子指标合成：
+  ① 土地覆盖变化（相对基期）② 土地生产力（NDVI/植被指数相对基期的退化）
+  ③ 土壤有机碳储量（0-30 cm，相对基期下降 ≥10% 判退化）。任一子指标退化即计入。
+  保管机构 UNCCD，Tier I。推荐数据：ESA WorldCover/CCI、SoilGrids SOC、NDVI 时序。
+  SDK 已有配套示例（examples/sdg_15_3_1）；SDGNode Recipe 在其上扩展三子指标。
+tags: [indicator-definition, unsd, land-degradation, ldn, "sdg:15", routing]
+interface:
+  type: indicator-definition
+  version: "2025"
+capabilities: [indicator-query]
+access:
+  protocol: https
+  endpoint: "https://unstats.un.org/sdgs/metadata/files/?indicator=15.3.1"
+  auth: none
+  format: HTML
+provenance:
+  provider: "UNSD / UNCCD"
+  source: "https://unstats.un.org/sdgs/metadata/"
+  lineage: "UNSD 元数据仓库 2025 版 + UNCCD LDN 评估手册（LDN Toolbox 方法）；SDGNode 摘编"
+license: "CC-BY-4.0"
+compliance:
+  sovereignty: intl
+  sensitivity: public
+trust:
+  verified: true
+  score: 0.99
+"geonexus:sdg":
+  goals: [15]
+  indicators: ["15.3.1"]
+  tier: "I"
+  custodian: UNCCD
+  unit: proportion
+  disaggregation: ["land-cover-class", "ecozone"]
+  spatial_disaggregation: [grid-30m, national, subnational]
+  requires_capabilities:
+    - land-cover
+    - land-cover-change
+    - transition-matrix
+    - ldn-assessment
+    - zonal-statistics
+    - report-render
+  related_cards:
+    - sdg.data.esa.worldcover-2024
+    - sdg.data.usgs.landsat-c2-l2
+    - sdg.data.umd.hansen-gfc-1.12
+    - "recipe://geonexus/sdg-15-3-1@1.0.0"

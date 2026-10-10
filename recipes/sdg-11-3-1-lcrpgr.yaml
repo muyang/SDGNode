@@ -1,0 +1,159 @@
+# SDGNode 首批 Recipe · SDG 11.3.1 LCRPGR 评估（沿 examples/sdg_15_3_1 范式）
+# 2 类数据(边界+GHSL 双栅格) + 2 算子(clip-stack+lcrpgr) + 1 报告渲染。
+# 产出不是一个数字，而是一条能复盘到每个输入的证据链。
+recipe_version: "1.0"
+id: recipe://sdg/11-3-1-lcrpgr@1.0.0
+name: SDG 11.3.1 土地消耗率评估（可复用方案）
+description: >-
+  按 UN-Habitat 口径计算目标城市 LCR/PGR/LCRPGR，输出指标值、建成区转变图与
+  带口径说明的评估报告。方法参数 fixed 钉死，year/city 可 fork 复用。
+license: CC-BY-4.0
+tags:
+  - sdg
+  - urban
+  - lcrpgr
+
+params:
+  - name: year
+    type: integer
+    required: true
+    minimum: 2015
+    maximum: 2025
+    target: s3.params.year
+    description: 目标评估年，与 baseline 配对判断这五年的土地消耗态势。
+  - name: city
+    type: enum
+    enum:
+      - 北京
+      - 上海
+      - 广州
+      - 武汉
+    default: 北京
+    target: s1.params.city
+    description: 评估城市。枚举而不是自由文本——边界站位必须能对齐。
+  - name: baseline
+    type: integer
+    scope: fixed
+    default: 2015
+    description: 基准年。作者钉死：换基准年就是换了一个指标口径，不是换参数。
+  - name: method
+    type: string
+    scope: fixed
+    default: "UN-Habitat 2025"
+    target: s3.params.method
+    description: 指标口径版本。
+  - name: report_format
+    type: enum
+    enum:
+      - html
+      - pdf
+      - docx
+    default: html
+    target: s4.params.format
+
+requires:
+  - sdg.data.boundary.chn-cities
+  - sdg.data.jrc.ghs-built-s
+  - sdg.data.jrc.ghs-pop
+  - sdg.skill.raster.clip-stack
+  - sdg.skill.urban.lcrpgr
+  - sdg.skill.report.render
+
+steps:
+  - id: s1
+    kind: skill
+    uses: sdg.data.boundary.chn-cities
+    description: 取目标城市行政边界，作为后续所有栅格运算的分析掩膜（AOI）。
+    params:
+      city: ${params.city}
+    outputs:
+      aoi: 城市边界（GeoJSON）
+      mask: 栅格化掩膜
+
+  - id: s2
+    kind: skill
+    uses: sdg.skill.raster.clip-stack
+    depends_on:
+      - s1
+    description: 按掩膜裁剪并对齐两期 GHS-BUILT-S 与 GHS-POP（R2023A，baseline/year 两期）。
+    inputs:
+      mask: step://s1/mask
+    outputs:
+      built_up_t0: 基期建成区
+      built_up_t1: 目标期建成区
+      pop_t0: 基期人口
+      pop_t1: 目标期人口
+      stack: 对齐堆栈（备查）
+    timeout_seconds: 1800
+    resources:
+      cpu: 4
+      memory_mb: 8192
+
+  - id: s3
+    kind: skill
+    uses: sdg.skill.urban.lcrpgr
+    depends_on:
+      - s2
+    description: 逐年计算土地消耗率、人口增长率及其比值（SDG 11.3.1 指标值）。
+    params:
+      year: ${params.year}
+      baseline: ${params.baseline}
+      method: ${params.method}
+    inputs:
+      built_up_t0: step://s2/built_up_t0
+      built_up_t1: step://s2/built_up_t1
+      population_t0: step://s2/pop_t0
+      population_t1: step://s2/pop_t1
+      aoi: step://s1/aoi
+    outputs:
+      lcr: 土地消耗率
+      pgr: 人口增长率
+      lcrpgr: 指标值（比值）
+      transition_map: 建成区转变图
+    timeout_seconds: 1800
+    max_attempts: 1
+    resources:
+      cpu: 4
+      memory_mb: 8192
+
+  - id: s4
+    kind: skill
+    uses: sdg.skill.report.render
+    depends_on:
+      - s3
+    description: 按 tpl.sdg-report 渲染带图、带表、带口径说明与数据快照的评估报告。
+    params:
+      format: ${params.report_format}
+      template: tpl.sdg-report
+      title: SDG 11.3.1 土地消耗率评估
+    inputs:
+      lcr: step://s3/lcr
+      pgr: step://s3/pgr
+      lcrpgr: step://s3/lcrpgr
+      transition_map: step://s3/transition_map
+    outputs:
+      report: 报告文件
+
+entrypoint: s1
+
+outputs:
+  - name: lcrpgr_value
+    from: s3.lcrpgr
+    role: data
+    media_type: application/json
+    description: SDG 11.3.1 指标值（LCR/PGR）——结论本身。
+  - name: transition_map
+    from: s3.transition_map
+    role: data
+    media_type: image/tiff
+    description: 建成区转变图——结论的空间形态。
+  - name: report
+    from: s4.report
+    role: knowledge
+    media_type: text/html
+    description: 评估报告——含方法、口径与数据快照，可安全引用。
+
+data_snapshot:
+  ghs: "R2023A"
+  boundary: "2024.12"
+  worldcover: "2024"

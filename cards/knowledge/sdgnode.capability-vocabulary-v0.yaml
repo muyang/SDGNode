@@ -1,0 +1,29 @@
+# SDGNode 首批卡 · knowledge（本仓库治理工件的自描述卡）
+geocard_version: "1.0"
+id: sdg.knowledge.sdgnode.capability-vocabulary-v0
+type: knowledge
+name: SDGNode 能力受控词表 v0.1
+description: >-
+  SDGNode 卡片库的 capabilities 受控词表（10 域 60+ 术语，中英对照）：
+  registry search --capability 精确召回、GAAG 语义门控、指标卡 requires_capabilities
+  路由均依赖本词表。新术语须经 PR 评审后写入。工件路径 profile/capabilities-vocabulary.yaml。
+tags: [vocabulary, governance, profile, sdgnode]
+interface:
+  type: vocabulary
+  version: "0.1"
+access:
+  protocol: file
+  endpoint: "profile/capabilities-vocabulary.yaml"
+  auth: none
+  format: YAML
+provenance:
+  provider: SDGNode
+  source: "docs/GeoNexus-SDG能力注册技术方案.md §4.2 / 附录 A"
+  lineage: "v0.1 首批（2026-07）；随卡片库演进"
+license: "CC-BY-4.0"
+compliance:
+  sovereignty: local-node
+  sensitivity: public
+trust:
+  verified: true
+  score: 0.9

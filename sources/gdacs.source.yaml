@@ -1,0 +1,43 @@
+# 管线 3 · API 数据源清单：GDACS 灾害事件
+source_version: "1.0"
+provider: "GDACS (UN/EC-JRC)"
+namespace: gdacs
+product: events
+name: "GDACS 全球灾害事件库"
+description: >-
+  全球灾害预警与协调系统：地震、洪水、气旋事件的实时/历史目录（含严重度、影响人口估计、
+  地理范围），SDG 1.5/11.5/13.1 灾害指标的事件源。矢量点/面数据。
+api:
+  base_url: "https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH"
+  auth: none
+  response_format: "JSON/GeoJSON"
+  docs: "https://www.gdacs.org/gdacsapi/api/events/geteventlist/SEARCH?eventlist=EQ;FL;TC"
+coverage:
+  columns: [eventid, eventtype, country, fromdate, todate, severity, alertlevel, population_affected, magnitude, geometry]
+  record_count: 25000
+  spatial_key: geometry
+  time_key: fromdate
+  update_interval: P1D
+sdg:
+  goals: [1, 11, 13]
+  custodian: "GDACS (UN OCHA / EC-JRC)"
+  tier: mixed
+license:
+  name: "GDACS Terms of Use (attribution required)"
+  url: "https://www.gdacs.org/about/termsofuse.aspx"
+compliance:
+  sovereignty: intl
+  sensitivity: public
+skill:
+  id: fetch-gdacs
+  name: "GDACS 灾害事件获取"
+  description: "按事件类型/时间窗/国家查询 GDACS 事件列表，输出 GeoJSON（事件点+严重度属性），供暴露度叠加分析。"
+  node_endpoint: "http://sdg-disaster-node:8787"
+  inputs:
+    - {name: event_types, type: array, required: false, description: "EQ/FL/TC/DR/VO；缺省全部"}
+    - {name: date_start, type: string, required: false, description: "YYYY-MM-DD"}
+    - {name: date_end, type: string, required: false}
+    - {name: country, type: string, required: false}
+  outputs:
+    - {name: events_geojson, type: file}
+    - {name: events_csv, type: file}

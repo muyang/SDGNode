@@ -1,0 +1,40 @@
+# SDGNode 首批卡 · VGI（管线 1：SDK adapters/osm.py Overpass 适配器可再生成查询级卡）
+geocard_version: "1.0"
+id: sdg.data.osm.china-urban-features
+type: data
+name: OpenStreetMap 中国城市要素（Overpass 查询卡）
+description: >-
+  经 SDK OSM 适配器（Overpass API）按需查询的中国城市要素集合：建筑轮廓（building）、
+  道路（highway=primary/secondary/tertiary）、水体（natural=water/waterway）、
+  土地利用（landuse）。快照语义：无固定 temporal 覆盖，查询时刻即版本
+  （provenance.lineage 记录）。SDG 用途：基础设施完备度、可达性、暴露度分析、
+  城市形态协变量。
+tags: [osm, vgi, china, urban, query-card, "sdg:9", "sdg:11"]
+spatial:
+  bbox: [73.5, 3.8, 135.1, 53.6]
+  crs: "EPSG:4326"
+capabilities: [built-up-extent, accessibility, public-transport-access, exposure-overlay, administrative-boundary]
+access:
+  protocol: https
+  endpoint: "https://overpass-api.de/api/interpreter"
+  auth: none
+  format: GeoJSON
+provenance:
+  provider: "OpenStreetMap contributors"
+  source: "https://www.openstreetmap.org"
+  lineage: "Overpass 查询模板（building/road/water/landuse，镜像故障转移）；SDK adapters/osm.py 生成；2026-07 快照"
+license:
+  name: "Open Database License 1.0 (ODbL)"
+  url: "https://opendatacommons.org/licenses/odbl/1-0/"
+compliance:
+  sovereignty: intl
+  restrictions: ["attribution-required", "share-alike"]
+  sensitivity: public
+trust:
+  verified: true
+  score: 0.85
+"geonexus:sdg":
+  goals: [9, 11]
+  indicators: ["11.2.1", "11.7.1", "9.1.1"]
+  custodian: "OSM 社区"
+  spatial_disaggregation: [city, subnational]

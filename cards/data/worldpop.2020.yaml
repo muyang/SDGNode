@@ -1,0 +1,43 @@
+# SDGNode 首批卡 · 全球专题产品（管线 2）
+geocard_version: "1.0"
+id: sdg.data.worldpop.2020
+type: data
+name: WorldPop 全球格点人口 2020（100 m，无约束版）
+description: >-
+  WorldPop 2020 年全球 100 m（约 0.000833°）格点人口估计（unconstrained，随机森林
+  dasymetric 分解）。SDG 用途：暴露度分析分母、公共服务可达性权重、统计指标格点化。
+  与 GHS-POP 互补：WorldPop 年际更新快，GHSL 多时相一致性好。
+tags: [population, global, worldpop, dasymetric, "sdg:1", "sdg:3", "sdg:11"]
+spatial:
+  bbox: [-180, -60, 180, 84]
+  crs: "EPSG:4326"
+  resolution: 100
+temporal:
+  start: "2020-01-01T00:00:00Z"
+  end: "2020-12-31T23:59:59Z"
+  interval: "P1Y"
+bands:
+  - {name: population, dtype: float32, units: "persons/km2 grid", description: "格点人口数"}
+capabilities: [population-grid, dasymetric-disaggregation, exposure-overlay]
+access:
+  protocol: https
+  endpoint: "https://data.worldpop.org/GIS/Population/Global_2000_2020/2020/"
+  auth: none
+  format: GeoTIFF
+provenance:
+  provider: WorldPop / University of Southampton
+  source: "https://www.worldpop.org"
+  lineage: "各国普查/官方估计 + RF dasymetric（建成区/夜光/POI 协变量）；2000-2020 年度序列"
+license: "CC-BY-4.0"
+compliance:
+  sovereignty: intl
+  sensitivity: public
+trust:
+  verified: true
+  score: 0.9
+"geonexus:sdg":
+  goals: [1, 3, 11]
+  indicators: ["1.1.1", "3.9.1", "11.5.1"]
+  custodian: WorldPop
+  unit: persons
+  spatial_disaggregation: [grid-100m, national, subnational]

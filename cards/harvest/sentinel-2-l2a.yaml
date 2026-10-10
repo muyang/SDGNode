@@ -1,0 +1,44 @@
+# P1 管线1 · STAC 采集产物（harvest_stac.py 生成，勿手改）
+geocard_version: '0.1'
+id: sdg.data.harvest.sentinel-2-l2a
+type: data
+name: Sentinel-2 L2A tile (example)
+description: Example STAC item used by the GeoNexus STAC adapter demo.
+tags:
+- stac
+- stac-collection:sentinel-2-l2a
+- harvested
+spatial:
+  bbox:
+  - -54.5
+  - -2.5
+  - -53.5
+  - -1.5
+  crs: EPSG:32721
+  resolution: 10.0
+temporal:
+  start: '2020-01-01T12:34:56Z'
+  end: '2020-01-01T12:34:56Z'
+bands:
+- name: B04
+  dtype: uint16
+  units: dn
+- name: B08
+  dtype: uint16
+  units: dn
+inputs: []
+outputs: []
+capabilities: []
+access:
+  protocol: stac
+  endpoint: https://example.com/items/S2A_T21LUN_20200101T123456
+  format: image/tiff; application=geotiff
+provenance:
+  provider: sentinel-2-l2a
+  source: S2A_T21LUN_20200101T123456
+  lineage: pipeline-1 STAC harvest (fixture)
+license:
+  name: proprietary
+compliance:
+  sensitivity: restricted
+  sovereignty: intl

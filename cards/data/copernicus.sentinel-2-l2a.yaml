@@ -1,0 +1,49 @@
+# SDGNode 首批卡 · collection 级目录卡（管线 1：CDSE STAC 直采可再生成，本卡为治理后的稳定版本）
+geocard_version: "1.0"
+id: sdg.data.copernicus.sentinel-2-l2a
+type: data
+name: Sentinel-2 L2A（全球 10 m 多光谱，collection 级目录卡）
+description: >-
+  Copernicus Sentinel-2 L2A 地表反射率产品目录（10/20/60 m，13 波段）。
+  collection 级卡：item 级检索由运行期经 STAC API 完成（防卡目录爆炸策略）。
+  SDG 用途：土地覆盖、作物制图、水体提取、城市绿地、灾害评估的基础影像源。
+tags: [sentinel-2, optical, global, copernicus, collection-card, "sdg:2", "sdg:6", "sdg:11", "sdg:13", "sdg:15"]
+spatial:
+  bbox: [-180, -56, 180, 84]
+  crs: "EPSG:4326"
+  resolution: 10
+temporal:
+  start: "2015-06-23T00:00:00Z"
+  end: "2026-12-31T00:00:00Z"      # 滚动归档：以 data_snapshot/采集时间为准
+  interval: "P5D"
+bands:
+  - {name: B02, dtype: uint16, units: reflectance, description: "Blue 490nm"}
+  - {name: B03, dtype: uint16, units: reflectance, description: "Green 560nm"}
+  - {name: B04, dtype: uint16, units: reflectance, description: "Red 665nm"}
+  - {name: B08, dtype: uint16, units: reflectance, description: "NIR 842nm"}
+  - {name: B11, dtype: uint16, units: reflectance, description: "SWIR1 1610nm"}
+  - {name: B12, dtype: uint16, units: reflectance, description: "SWIR2 2190nm"}
+capabilities: [ndvi, land-cover, change-detection, flood-mapping, crop-mapping, water-extent]
+access:
+  protocol: stac
+  endpoint: "https://catalogue.dataspace.copernicus.eu/stac/collections/sentinel-2-l2a"
+  auth: oauth2        # CDSE token（免费账号）；SDK sentinel_hub 适配器带 credential 支持
+  format: JPEG2000
+provenance:
+  provider: "ESA / Copernicus"
+  source: "https://dataspace.copernicus.eu"
+  lineage: "S2A/S2B/S2C L2A（Sen2Cor 大气校正）；collection 级目录卡，2026-07 采集"
+license:
+  name: "Copernicus Data Policy (free, full and open)"
+  url: "https://dataspace.copernicus.eu/about/data-policy"
+compliance:
+  sovereignty: EU
+  sensitivity: public
+trust:
+  verified: true
+  score: 0.98
+"geonexus:sdg":
+  goals: [2, 6, 11, 13, 15]
+  indicators: ["6.6.1", "11.3.1", "11.7.1", "15.1.1"]
+  custodian: ESA
+  spatial_disaggregation: [grid-10m]

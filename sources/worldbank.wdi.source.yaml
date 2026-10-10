@@ -1,0 +1,44 @@
+# 管线 3 · API 数据源清单：世界银行 WDI
+source_version: "1.0"
+provider: "World Bank"
+namespace: worldbank
+product: wdi
+name: "World Bank World Development Indicators (WDI)"
+description: >-
+  世界发展指标：1400+ 发展指标的国家级年度时间序列（贫困、经济、能源、基建、环境），
+  SDG 1/8/9/10/17 的核心参数与分母来源。非空间表格资产。
+api:
+  base_url: "https://api.worldbank.org/v2"
+  auth: none
+  response_format: "JSON/CSV"
+  docs: "https://datahelpdesk.worldbank.org/knowledgebase/articles/889392"
+coverage:
+  columns: [seriesCode, seriesName, countryCode, countryName, date, value, unit, footnote]
+  record_count: 400000
+  spatial_key: countryCode      # ISO 3166-1 alpha-2
+  time_key: date
+  update_interval: P1Y
+sdg:
+  goals: [1, 8, 9, 10, 17]
+  custodian: "World Bank"
+  tier: mixed
+license:
+  name: "World Bank Terms of Use"
+  url: "https://www.worldbank.org/en/about/legal/terms-of-use"
+compliance:
+  sovereignty: intl
+  sensitivity: public
+skill:
+  id: fetch-wdi
+  name: "WDI 指标序列获取"
+  description: "按 indicator/country/年份查询世界银行 v2 API，输出 CSV；支持分页聚合与缺口标注。"
+  node_endpoint: "http://sdg-stats-node:8787"
+  inputs:
+    - {name: series_codes, type: array, required: true, description: "WDI 序列代码，如 NY.GDP.PCAP.KD"}
+    - {name: country_codes, type: array, required: false, description: "ISO alpha-2；缺省为全部"}
+    - {name: year_start, type: number, required: false}
+    - {name: year_end, type: number, required: false}
+    - {name: spatialize, type: boolean, required: false}
+  outputs:
+    - {name: series_csv, type: file}
+    - {name: series_geojson, type: file}

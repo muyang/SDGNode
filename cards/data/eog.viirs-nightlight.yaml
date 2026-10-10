@@ -1,0 +1,47 @@
+# SDGNode 首批卡 · 受限注册数据（EOG 免费账号 + API Key；compliance 降级演示）
+geocard_version: "1.0"
+id: sdg.data.eog.viirs-nightlight
+type: data
+name: EOG VIIRS DNB 夜间灯光月度合成（全球 500 m）
+description: >-
+  美国地球观测组（EOG）VIIRS 夜光月度无云合成（vcm-configuration，杂散光校正）。
+  SDG 用途：经济活动代理、电力可及性（7.1.1）、贫困制图协变量、城市范围辅助提取。
+  注册需 EOG 免费账号（access.auth=apikey）→ sensitivity=restricted；
+  引用该卡的复合案例将按可见性继承降级。
+tags: [nightlights, global, viirs, economic-proxy, registration-required, "sdg:1", "sdg:7", "sdg:8", "sdg:11"]
+spatial:
+  bbox: [-180, -65, 180, 75]
+  crs: "EPSG:4326"
+  resolution: 500
+temporal:
+  start: "2012-04-01T00:00:00Z"
+  end: "2026-12-31T00:00:00Z"      # 滚动更新（月度）
+  interval: "P1M"
+bands:
+  - {name: avg_rade9h, dtype: float32, units: "nW/(cm2·sr)", description: "月均辐射率（无云像元）"}
+  - {name: cf_cvg, dtype: float32, units: count, description: "参与合成的无云观测数"}
+capabilities: [nightlights, poverty-estimation, built-up-extent]
+access:
+  protocol: https
+  endpoint: "https://eogdata.mines.edu/nightly_light/v1/v1/"
+  auth: apikey          # EOG 免费注册账号 token
+  format: GeoTIFF
+provenance:
+  provider: "Earth Observation Group (EOG), Colorado School of Mines"
+  source: "https://eogdata.mines.edu"
+  lineage: "Suomi-NPP VIIRS DNB（2012-）+ NOAA-20 VIIRS（2018-）；vcm-configuration 月度合成"
+license:
+  name: "EOG Data Use Agreement (CC-BY-4.0 with registration)"
+  url: "https://eogdata.mines.edu/products/register/"
+compliance:
+  sovereignty: US
+  restrictions: ["registration-required", "attribution-required"]
+  sensitivity: restricted
+trust:
+  verified: true
+  score: 0.92
+"geonexus:sdg":
+  goals: [1, 7, 8, 11]
+  indicators: ["7.1.1", "1.1.1"]
+  custodian: EOG
+  spatial_disaggregation: [grid-500m, national, subnational]

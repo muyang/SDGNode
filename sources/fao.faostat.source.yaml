@@ -1,0 +1,44 @@
+# 管线 3 · API 数据源清单：FAOSTAT
+source_version: "1.0"
+provider: FAO
+namespace: fao
+product: faostat
+name: "FAOSTAT 农业粮食统计数据库"
+description: >-
+  联合国粮农组织统计数据库：生产、作物单产、土地利用、化肥农药、粮食平衡、排放等
+  24 个领域的国家年度序列，SDG 2（零饥饿）与 15（陆地生态）的核心统计源。非空间表格资产。
+api:
+  base_url: "https://fenixservices.fao.org/faostat/api/v1"
+  auth: none
+  response_format: "JSON/CSV"
+  docs: "https://www.fao.org/faostat/en/#data"
+coverage:
+  columns: [AreaCode, Area, ItemCode, Item, ElementCode, Element, Unit, Year, Value, Flag]
+  record_count: 1800000
+  spatial_key: AreaCode         # FAO M49 变体
+  time_key: Year
+  update_interval: P1Y
+sdg:
+  goals: [2, 6, 12, 15]
+  custodian: FAO
+  tier: mixed
+license:
+  name: "CC-BY-NC-SA 3.0 IGO (FAO data terms)"
+  url: "https://www.fao.org/3/ca9294en/CA9294EN.pdf"
+compliance:
+  sovereignty: intl
+  sensitivity: public
+  restrictions: ["no-commercial-use"]
+skill:
+  id: fetch-faostat
+  name: "FAOSTAT 数据获取"
+  description: "按 dataset/area/item/element/年份查询 FAOSTAT API，输出规整化 CSV（长表）。"
+  node_endpoint: "http://sdg-stats-node:8787"
+  inputs:
+    - {name: dataset, type: string, required: true, description: "数据集代码，如 QC（作物）、OA（面积）、AE（环境）"}
+    - {name: area_codes, type: array, required: false}
+    - {name: item_codes, type: array, required: false}
+    - {name: element_codes, type: array, required: false, description: "如 5110（化肥养分）"}
+    - {name: years, type: array, required: false}
+  outputs:
+    - {name: series_csv, type: file}

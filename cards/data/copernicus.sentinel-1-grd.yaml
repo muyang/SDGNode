@@ -1,0 +1,44 @@
+# SDGNode 首批卡 · collection 级目录卡（管线 1：CDSE STAC）
+geocard_version: "1.0"
+id: sdg.data.copernicus.sentinel-1-grd
+type: data
+name: Sentinel-1 GRD（全球 C 波段 SAR，collection 级目录卡）
+description: >-
+  Copernicus Sentinel-1 GRD 地表雷达反射率（C 波段，全天候全天时，10 m）。
+  SDG 用途：洪涝提取（云雨无关）、地表形变（InSAR）、水稻制图、海冰与海岸监测。
+tags: [sentinel-1, sar, global, copernicus, collection-card, "sdg:6", "sdg:13", "sdg:14"]
+spatial:
+  bbox: [-180, -85, 180, 85]
+  crs: "EPSG:4326"
+  resolution: 10
+temporal:
+  start: "2014-10-03T00:00:00Z"
+  end: "2026-12-31T00:00:00Z"      # 滚动归档
+  interval: "P6D"
+bands:
+  - {name: VV, dtype: float32, units: "sigma0 dB", description: "VV 极化后向散射"}
+  - {name: VH, dtype: float32, units: "sigma0 dB", description: "VH 极化后向散射"}
+capabilities: [flood-mapping, change-detection, water-extent]
+access:
+  protocol: stac
+  endpoint: "https://catalogue.dataspace.copernicus.eu/stac/collections/sentinel-1-grd"
+  auth: oauth2
+  format: "SAFE/tiff"
+provenance:
+  provider: "ESA / Copernicus"
+  source: "https://dataspace.copernicus.eu"
+  lineage: "S1A/S1B(历史)/S1C GRD（IPF 处理链）；collection 级目录卡，2026-07 采集"
+license:
+  name: "Copernicus Data Policy (free, full and open)"
+  url: "https://dataspace.copernicus.eu/about/data-policy"
+compliance:
+  sovereignty: EU
+  sensitivity: public
+trust:
+  verified: true
+  score: 0.98
+"geonexus:sdg":
+  goals: [6, 11, 13, 14]
+  indicators: ["6.6.1", "11.5.1", "13.1.1"]
+  custodian: ESA
+  spatial_disaggregation: [grid-10m]

@@ -1,0 +1,37 @@
+# SDGNode 首批卡 · skill（公共算子；P1 容器化交付，卡先行注册接口契约）
+geocard_version: "1.0"
+id: sdg.skill.raster.zonal-statistics
+type: skill
+name: 分区统计（Zonal Statistics）
+description: >-
+  按矢量分区对栅格做统计聚合（mean/sum/min/max/std/面积加权），输出统计表与
+  带统计属性的 GeoJSON。SDG 用途：指标计算的最后一步聚合（如城市建成区面积、
+  保护区内森林损失、人口加权 PM2.5 暴露）。公共算子：被多数指标 Recipe 引用。
+tags: [analysis, raster, vector, public-operator]
+interface:
+  type: geomcp-skill
+  version: "1.0"
+capabilities: [zonal-statistics]
+inputs:
+  - {name: raster, type: raster, required: true, description: "输入栅格（COG/GeoTIFF 路径或引用）"}
+  - {name: zones, type: vector, required: true, description: "分区矢量（GeoJSON/GPKG）"}
+  - {name: stats, type: string, required: false, description: "逗号分隔统计量，默认 mean,sum,min,max"}
+  - {name: weight_by_area, type: boolean, required: false, description: "面积加权（默认 true）"}
+outputs:
+  - {name: stats_table, type: file, description: "分区统计 CSV（zone_id × stats）"}
+  - {name: stats_geojson, type: file, description: "带统计属性的分区 GeoJSON"}
+access:
+  protocol: geomcp
+  endpoint: "http://sdg-analysis-node:8787"
+  auth: apikey
+provenance:
+  provider: SDGNode
+  source: "rasterstats/GDAL 封装"
+  lineage: "P1 容器化交付（sdgnode-skills 镜像）；接口契约 P0 先行冻结"
+license: "Apache-2.0"
+compliance:
+  sovereignty: local-node
+  sensitivity: public
+trust:
+  verified: false
+  score: 0.7

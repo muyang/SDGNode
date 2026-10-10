@@ -1,0 +1,87 @@
+# SDGNode 首批卡 · workflow 复合案例卡（沿 SDK examples/sdg_15_3_1 范式）
+# 治理要点：
+#   - baseline/method 为 scope=fixed（换基准年/口径 = 换指标定义，不是换参数）
+#   - year/city/report_format 为 reusable（复用自由度）
+#   - report 组件 required=false：运行前不存在产物，不阻塞案例卡被发现
+#   - 有效可见性 = min(各内容组件)；任一数据组件转 restricted，本案例随之降级（404 语义）
+geocard_version: "1.0"
+id: geocard.case.sdg-11-3-1-chn-2020
+type: workflow
+name: SDG 11.3.1 土地消耗率评估（中国城市，2020）
+description: >-
+  4 数据 + 2 算子 + 1 报告的整体评估方案卡：以 GHS-BUILT-S/GHS-POP 双期栅格与城市
+  边界为输入，按 UN-Habitat 口径计算 LCR/PGR/LCRPGR，产出可溯源报告
+  （来源四件套 run/recipe/params/data_snapshot + checksum）。
+  本卡是**门面**：只持引用，执行 DAG 在 recipe_ref。
+tags: [sdg:11, urban, lcrpgr, case, draft-p1]
+spatial:
+  bbox: [73.5, 3.8, 135.1, 53.6]
+  crs: "EPSG:4326"
+temporal:
+  start: "2015-01-01T00:00:00Z"
+  end: "2020-12-31T00:00:00Z"
+composition:
+  components:
+    - {id: sdg.data.boundary.chn-cities, role: data, step: s1}
+    - {id: sdg.data.jrc.ghs-built-s, role: data, step: s2}
+    - {id: sdg.data.jrc.ghs-pop, role: data, step: s2}
+    - {id: sdg.skill.raster.clip-stack, role: skill, step: s2}
+    - {id: sdg.skill.urban.lcrpgr, role: skill, step: s3}
+    - {id: sdg.skill.report.render, role: skill, step: s4}
+    - {id: report.sdg1131.chn.2020, role: knowledge, step: s4, required: false, alias: report}
+  template: tpl.sdg-report
+params:
+  params:
+    - name: year
+      type: integer
+      required: true
+      minimum: 2015
+      maximum: 2025
+      target: s3.params.year
+      description: 目标评估年（与 baseline 配对）
+    - name: city
+      type: enum
+      enum: ["北京", "上海", "广州", "武汉"]
+      default: "北京"
+      target: s1.params.city
+      description: 评估城市（枚举保证边界站位可对齐）
+    - name: baseline
+      type: integer
+      scope: fixed
+      default: 2015
+      description: 基准年。作者钉死：换基准年就是换指标口径，不是换参数。
+    - name: method
+      type: string
+      scope: fixed
+      default: "UN-Habitat 2025"
+      target: s3.params.method
+      description: 指标口径版本（UNSD 元数据对齐）
+    - name: report_format
+      type: enum
+      enum: [html, pdf, docx]
+      default: html
+      target: s4.params.format
+recipe_ref:
+  recipe_id: "recipe://sdg/11-3-1-lcrpgr@1.0.0"
+  entrypoint: s1
+  data_snapshot:
+    ghs: "R2023A"
+    boundary: "2024.12"
+    worldcover: "2024"
+license: "CC-BY-4.0"
+compliance:
+  sovereignty: local-node
+  sensitivity: public
+trust:
+  verified: false
+  score: 0.6
+"geonexus:sdg":
+  goals: [11]
+  indicators: ["11.3.1"]
+  tier: "I"
+  custodian: "UN-Habitat"
+  unit: ratio
+  spatial_disaggregation: [city]
+  related_cards:
+    - sdg.knowledge.unsd.indicator-11.3.1
+    - "recipe://sdg/11-3-1-lcrpgr@1.0.0"

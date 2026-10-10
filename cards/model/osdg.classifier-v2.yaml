@@ -1,0 +1,44 @@
+# SDGNode 首批卡 · model（管线 4；CPU 即可运行，适合 P2 首批部署）
+geocard_version: "1.0"
+id: sdg.model.osdg.classifier-v2
+type: model
+name: OSDG 2.0 多语言 SDG 文本分类器
+description: >-
+  Open Source SDG（OSDG 2.0）多语言文本分类器：输入任意文本（论文摘要/政策段落/报告章节），
+  输出与 17 个 SDG 目标的相关性得分。SDG 用途：文献-指标对齐、VNR 报告 SDG 映射、
+  知识卡自动打标（SDG 17 数据伙伴关系）。非空间模型（spatial 段缺省）。
+tags: [llm, text-classification, osdg, multilingual, sdg-mapping, "sdg:17", non-spatial]
+capabilities: [sdg-text-classification]
+interface:
+  type: inference-http
+  version: "1.0"
+inputs:
+  - {name: text, type: string, required: true, description: "待分类文本（≤ 8k tokens，超长由调用方分段）"}
+  - {name: language, type: string, required: false, description: "zh/en/…；缺省自动检测"}
+outputs:
+  - {name: sdg_scores, type: object, description: "17 目标相关性得分 {sdg: score}（输出契约：声明即必检）"}
+  - {name: matched_sdgs, type: array, description: "高于阈值的 SDG 编号列表"}
+runtime:
+  cpu: 4
+  memory: "16Gi"
+  gpu: "none"
+access:
+  protocol: https            # → InferenceProvider（同步 HTTP）
+  endpoint: "http://127.0.0.1:8801/osdg/invoke"   # P2 契约参考服务（services/model_provider.py，v0-lexical）
+  auth: apikey
+provenance:
+  provider: "OSDG.ai 社区（Lauset et al.）"
+  source: "https://osdg.ai"
+  lineage: "arXiv:2005.14569；OSDG 2.0 多语言模型；社区标注语料；权重版本与镜像 digest 部署时写入"
+license:
+  name: "OSDG 开源许可（MIT，见仓库）"
+  url: "https://osdg.ai"
+compliance:
+  sovereignty: intl
+  sensitivity: public
+trust:
+  verified: true      # P2 invoke_model 成功路径实测（check_model_invoke.py T1）；服务为契约级词法占位，非 Transformer 权重
+  score: 0.75
+"geonexus:sdg":
+  goals: [17]
+  custodian: "OSDG.ai"

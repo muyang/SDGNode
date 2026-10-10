@@ -1,0 +1,35 @@
+# SDGNode 首批卡 · knowledge（外部报告文档卡，text 合约）
+geocard_version: "1.0"
+id: sdg.knowledge.cbas.bigdata-sdg-report-2024
+type: knowledge
+name: 《地球大数据支撑可持续发展目标报告（2024）》
+description: >-
+  可持续发展大数据国际研究中心（CBAS）年度报告：以地球大数据（SDGSAT-1 等卫星观测、
+  台站记录、调查统计、网络媒体数据）对 90 余项 SDG 指标开展全球/区域评估，
+  含中国全部环境类指标。作为 SDGNode 指标方法学与基线结果的外部参照知识源。
+tags: [report, big-earth-data, sdgsat, cbas, china, reference]
+interface:
+  type: document
+  version: "2024"
+capabilities: [indicator-query]
+access:
+  protocol: https
+  endpoint: "https://www.cbas.ac.cn"
+  auth: none
+  format: PDF
+provenance:
+  provider: "CBAS / 可持续发展大数据国际研究中心"
+  source: "https://www.sdgsat.ac.cn"
+  lineage: "2019 起年度报告序列（2019/2020/2021/2022/2023/2024）；本卡指向 2024 版"
+license:
+  name: "CBAS 开放获取（署名）"
+  url: "https://www.cbas.ac.cn"
+compliance:
+  sovereignty: CN
+  sensitivity: public
+trust:
+  verified: true
+  score: 0.9
+"geonexus:sdg":
+  goals: [1, 2, 3, 6, 7, 11, 12, 13, 14, 15, 17]
+  custodian: "CBAS"

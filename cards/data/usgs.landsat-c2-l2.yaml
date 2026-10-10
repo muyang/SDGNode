@@ -1,0 +1,47 @@
+# SDGNode 首批卡 · collection 级目录卡（管线 1：EarthSearch/Planetary Computer STAC）
+geocard_version: "1.0"
+id: sdg.data.usgs.landsat-c2-l2
+type: data
+name: Landsat Collection 2 Level-2（全球 30 m 多光谱，collection 级目录卡）
+description: >-
+  USGS/NASA Landsat C2 L2 地表反射率/温度产品（L5/L7/L8/L9，30 m，1984 年至今连续档案）。
+  SDG 用途：长时序土地覆盖与森林变化（Hansen GFC 底源）、水体历史、土地退化基期。
+tags: [landsat, optical, global, long-term-archive, collection-card, "sdg:15", "sdg:6", "sdg:13"]
+spatial:
+  bbox: [-180, -83, 180, 83]
+  crs: "EPSG:4326"
+  resolution: 30
+temporal:
+  start: "1984-01-01T00:00:00Z"
+  end: "2026-12-31T00:00:00Z"      # 滚动归档
+  interval: "P16D"
+bands:
+  - {name: SR_B2, dtype: uint16, units: reflectance, description: "Blue"}
+  - {name: SR_B3, dtype: uint16, units: reflectance, description: "Green"}
+  - {name: SR_B4, dtype: uint16, units: reflectance, description: "Red"}
+  - {name: SR_B5, dtype: uint16, units: reflectance, description: "NIR（L5 为 B4）"}
+  - {name: ST_B10, dtype: uint16, units: "Kelvin*100", description: "热红外地表温度"}
+capabilities: [land-cover, forest-change, water-extent, change-detection, ldn-assessment]
+access:
+  protocol: stac
+  endpoint: "https://earth-search.aws.element84.com/v1/collections/landsat-c2-l2"
+  auth: none
+  format: COG
+provenance:
+  provider: "USGS / NASA"
+  source: "https://www.usgs.gov/landsat-missions"
+  lineage: "Collection 2（C2 L2 场景产品）；EarthSearch/AWS 开放数据镜像；2026-07 采集"
+license:
+  name: "USGS Public Domain (Landsat data are free and open)"
+  url: "https://www.usgs.gov/landsat-missions/landsat-data-access"
+compliance:
+  sovereignty: US
+  sensitivity: public
+trust:
+  verified: true
+  score: 0.98
+"geonexus:sdg":
+  goals: [6, 13, 15]
+  indicators: ["15.1.1", "15.2.1", "15.3.1", "6.6.1"]
+  custodian: "USGS"
+  spatial_disaggregation: [grid-30m]

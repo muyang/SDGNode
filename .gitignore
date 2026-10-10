@@ -1,0 +1,14 @@
+# 运行态与证据产物——均可由 scripts/ 验收脚本重放生成，不入库
+runs/
+state/
+cards/generated/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# 日志与系统杂项
+*.log
+.DS_Store
+Thumbs.db

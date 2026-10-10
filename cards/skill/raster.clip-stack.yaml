@@ -1,0 +1,37 @@
+# SDGNode P1 预置卡（draft）· 公共算子：多源栅格裁剪对齐（案例卡/Recipe 引用）
+geocard_version: "1.0"
+id: sdg.skill.raster.clip-stack
+type: skill
+name: 栅格裁剪与对齐堆栈（Clip & Stack）
+description: >-
+  按矢量掩膜裁剪多个栅格，并统一 CRS、分辨率、像元对齐与时间配对，输出可直接
+  进入指标算子的堆栈。SDG 用途：指标 Recipe 的数据准备步（如 GHS 建成区 × GHS 人口
+  两期对齐）。公共算子。
+tags: [analysis, raster, preprocess, public-operator, draft-p1]
+interface:
+  type: geomcp-skill
+  version: "1.0"
+capabilities: [raster-preprocess]
+inputs:
+  - {name: mask, type: vector, required: true, description: "裁剪掩膜（GeoJSON，通常为 AOI 边界）"}
+  - {name: rasters, type: array, required: true, description: "栅格引用列表（含期相标注 {ref, epoch}）"}
+  - {name: target_resolution, type: number, required: false, description: "统一分辨率（m）；缺省取最粗源"}
+  - {name: target_crs, type: string, required: false, description: "目标 CRS；缺省 EPSG:4326"}
+outputs:
+  - {name: stack, type: raster, description: "对齐后的多时相堆栈（多波段 COG 或 Zarr 引用）"}
+  - {name: alignment_report, type: file, description: "重采样/对齐质量报告 JSON"}
+access:
+  protocol: geomcp
+  endpoint: "http://sdg-analysis-node:8787"
+  auth: apikey
+provenance:
+  provider: SDGNode
+  source: "GDAL/rasterio 封装（warp + buildvrt）"
+  lineage: "P1 容器化交付；接口契约 P0 先行冻结"
+license: "Apache-2.0"
+compliance:
+  sovereignty: local-node
+  sensitivity: public
+trust:
+  verified: false
+  score: 0.6

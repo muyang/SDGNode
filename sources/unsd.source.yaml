@@ -1,0 +1,45 @@
+# 管线 3 · API 数据源清单：UN SDG Global Database
+# 由 scripts/generate_api_cards.py 消费，生成数据卡(statistical)+伴生 fetch skill 卡
+source_version: "1.0"
+provider: UNSD
+namespace: unsd
+product: sdgdb
+name: "UN SDG Global Database（官方指标序列）"
+description: >-
+  联合国统计司 SDG 全球指标数据库：231 项唯一指标的国家/区域年度序列与元数据。
+  非空间表格资产（statistical 合约），空间化由伴生技能与国家边界矢量连接完成。
+api:
+  base_url: "https://unstats.un.org/sdgapi/sdg"
+  auth: none
+  response_format: "JSON/CSV"
+  docs: "https://unstats.un.org/sdgs/indicators/indicators-list/"
+coverage:
+  columns: [seriesCode, seriesDescription, geoAreaCode, geoAreaName, timePeriodStart, timePeriodEnd, value, valueType, reportingType]
+  record_count: 900000
+  spatial_key: geoAreaCode      # M49 国家/区域码
+  time_key: timePeriodStart
+  update_interval: P1Y
+sdg:
+  goals: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+  custodian: UNSD
+  tier: mixed
+license:
+  name: "UN Terms of Use"
+  url: "https://www.un.org/en/about-us/terms-of-use"
+compliance:
+  sovereignty: intl
+  sensitivity: public
+skill:
+  id: fetch-unsd
+  name: "UNSD SDG 指标序列获取"
+  description: "按 indicator/area/时间窗查询 UNSD SDG API，输出 CSV；可选与国家边界矢量连接输出 GeoJSON。"
+  node_endpoint: "http://sdg-stats-node:8787"
+  inputs:
+    - {name: indicator, type: string, required: true, description: "指标编号，如 15.3.1"}
+    - {name: area_codes, type: array, required: false, description: "M49 geoAreaCode 列表；缺省为全部"}
+    - {name: year_start, type: number, required: false}
+    - {name: year_end, type: number, required: false}
+    - {name: spatialize, type: boolean, required: false, description: "与国家边界矢量连接输出 GeoJSON"}
+  outputs:
+    - {name: series_csv, type: file, description: "指标序列 CSV（statistical 合约列）"}
+    - {name: series_geojson, type: file, description: "空间化序列（spatialize=true 时输出）"}

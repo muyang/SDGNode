@@ -1,0 +1,48 @@
+# SDGNode P1 预置卡（draft）· SDG 11.3.1 指标算子（案例卡/Recipe 引用）
+geocard_version: "1.0"
+id: sdg.skill.urban.lcrpgr
+type: skill
+name: 土地消耗率/人口增长率算子（LCRPGR, SDG 11.3.1）
+description: >-
+  按 UN-Habitat 官方口径计算土地消耗率（LCR）、人口增长率（PGR）及其比值（LCRPGR）：
+  输入两期建成区栅格、两期人口栅格与城市边界，输出指标值与空间转变图。
+  方法参数（method/baseline）应被 Recipe 以 scope=fixed 钉死——换口径即换指标定义。
+tags: [indicator-operator, urban, "sdg:11", draft-p1]
+interface:
+  type: geomcp-skill
+  version: "1.0"
+capabilities: [lcrpgr, built-up-extent, population-grid, zonal-statistics]
+inputs:
+  - {name: built_up_t0, type: raster, required: true, description: "基期建成区（GHS-BUILT-S）"}
+  - {name: built_up_t1, type: raster, required: true, description: "目标期建成区"}
+  - {name: population_t0, type: raster, required: true, description: "基期人口格点（GHS-POP）"}
+  - {name: population_t1, type: raster, required: true, description: "目标期人口格点"}
+  - {name: aoi, type: vector, required: true, description: "城市分析边界"}
+  - {name: baseline, type: number, required: false, description: "基准年（默认由 Recipe fixed 参数注入）"}
+  - {name: year, type: number, required: false, description: "目标年"}
+  - {name: method, type: string, required: false, description: "口径版本，如 UN-Habitat 2025"}
+outputs:
+  - {name: lcr, type: number, description: "土地消耗率（年均建成区增长比例）"}
+  - {name: pgr, type: number, description: "人口增长率（年均）"}
+  - {name: lcrpgr, type: number, description: "LCR/PGR 比值（SDG 11.3.1 指标值）"}
+  - {name: transition_map, type: raster, description: "建成区转变图（新增/存量/非建成）"}
+access:
+  protocol: geomcp
+  endpoint: "http://sdg-analysis-node:8787"
+  auth: apikey
+provenance:
+  provider: SDGNode
+  source: "UN-Habitat SDG 11.3.1 计算方法（City Prosperity Initiative 扩展）"
+  lineage: "P1 交付（Python 实现 + 容器化）；口径参数以 UNSD 元数据为准"
+license: "Apache-2.0"
+compliance:
+  sovereignty: local-node
+  sensitivity: public
+trust:
+  verified: false
+  score: 0.6
+"geonexus:sdg":
+  goals: [11]
+  indicators: ["11.3.1"]
+  custodian: "UN-Habitat"
+  unit: ratio

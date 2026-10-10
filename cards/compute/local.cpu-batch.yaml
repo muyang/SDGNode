@@ -1,0 +1,29 @@
+# SDGNode 首批卡 · compute（CPU 批处理池；BatchProvider 后端）
+geocard_version: "1.0"
+id: sdg.compute.local.cpu-batch
+type: compute
+name: SDGNode CPU 批处理池（32 核 / 128GiB）
+description: >-
+  大范围批作业节点（submit → poll → collect）：全球/全国尺度制图、时序重建、
+  基础模型批量推理（Prithvi 批作业）。承接 access.protocol=batch 的模型卡下推执行。
+tags: [compute, cpu, batch, local]
+capabilities: [batch-compute]
+runtime:
+  cpu: 32
+  memory: "128Gi"
+  gpu: "none"
+access:
+  protocol: https
+  endpoint: "http://sdg-hpc-node:8802"
+  auth: apikey
+provenance:
+  provider: SDGNode
+  source: "本地机房/院内 HPC 队列"
+  lineage: "P2 起承接 BatchProvider 作业（作业状态机与租约由 CAFE/GeoTask 管理）"
+license: "Apache-2.0"
+compliance:
+  sovereignty: local-node
+  sensitivity: public
+trust:
+  verified: false
+  score: 0.6

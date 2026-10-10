@@ -1,0 +1,30 @@
+# SDGNode 首批卡 · compute（GPU 推理池；CAFE worker 接入，调度器按声明准入）
+geocard_version: "1.0"
+id: sdg.compute.local.gpu-a10
+type: compute
+name: SDGNode 本地 GPU 推理池（1×A10 24GB）
+description: >-
+  承载中小模型同步推理（samgeo、Clay 嵌入、OSDG、PM2.5-GBDT）的 GPU 节点。
+  CAFE worker 已接入（capabilities=[inference]）；GeoTask 调度器按 runtime 声明准入
+  （gpu_count/gpu_kind 记账——显存仅在声明时记账）。
+tags: [compute, gpu, inference, local]
+capabilities: [model-inference]
+runtime:
+  cpu: 16
+  memory: "64Gi"
+  gpu: "1xA10"
+access:
+  protocol: geomcp
+  endpoint: "http://sdg-model-node:8787"
+  auth: apikey
+provenance:
+  provider: SDGNode
+  source: "本地机房"
+  lineage: "P0 单节点；P2 起接入模型服务（FastAPI + provider 线上约定）"
+license: "Apache-2.0"
+compliance:
+  sovereignty: local-node
+  sensitivity: public
+trust:
+  verified: false
+  score: 0.6

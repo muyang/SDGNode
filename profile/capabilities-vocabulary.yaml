@@ -1,0 +1,94 @@
+# SDGNode 能力受控词表 v0（capabilities controlled vocabulary）
+# 规则：GeoCard.capabilities 中的术语必须属于本词表；新增术语走 PR 评审。
+# 用途：registry search --capability 精确召回；GAAG 语义门控；指标卡 requires_capabilities 路由。
+version: "0.1"
+updated: "2026-07-08"
+domains:
+  land:
+    zh: 陆地/土地覆盖/城市
+    terms:
+      - land-cover
+      - land-cover-change
+      - built-up-extent
+      - impervious-surface
+      - urban-morphology
+      - transition-matrix
+      - ldn-assessment
+      - lcrpgr
+      - forest-change
+      - forest-cover
+      - cropland-extent
+      - administrative-boundary
+  water:
+    zh: 水
+    terms:
+      - water-extent
+      - water-extent-change
+      - water-quality
+      - flood-mapping
+      - drought-index
+      - groundwater-stress
+  atmosphere:
+    zh: 大气/气候
+    terms:
+      - pm25-estimation
+      - pm25-exposure
+      - no2-column
+      - ghg-emission
+      - climate-downscaling
+  society:
+    zh: 人口/社会经济
+    terms:
+      - population-grid
+      - dasymetric
+      - dasymetric-disaggregation
+      - nightlights
+      - poverty-estimation
+      - accessibility
+      - public-transport-access
+      - greenspace-access
+      - greenspace-ratio
+  ecology:
+    zh: 生态/保护
+    terms:
+      - protected-area-ratio
+      - species-distribution
+      - habitat-connectivity
+      - coral-bleaching
+      - mangrove-extent
+      - red-list-index
+  agriculture:
+    zh: 农业
+    terms:
+      - crop-mapping
+      - yield-estimation
+      - phenology
+  disaster:
+    zh: 灾害
+    terms:
+      - landslide-susceptibility
+      - fire-detection
+      - storm-exposure
+      - exposure-overlay
+  analysis:
+    zh: 分析原语
+    terms:
+      - zonal-statistics
+      - spatial-hotspot
+      - gwr-analysis
+      - kriging
+      - network-isochrone
+      - raster-preprocess
+  platform:
+    zh: 平台原语
+    terms:
+      - ndvi
+      - change-detection
+      - segmentation
+      - eo-embeddings
+      - indicator-query
+      - report-render
+      - data-fetch
+      - sdg-text-classification
+      - model-inference
+      - batch-compute

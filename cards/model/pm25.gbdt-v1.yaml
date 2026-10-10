@@ -1,0 +1,48 @@
+# SDGNode 首批卡 · model（管线 4；轻量 GBDT，CPU 即可）
+geocard_version: "1.0"
+id: sdg.model.pm25.gbdt-v1
+type: model
+name: PM2.5 浓度估算模型（AOD + 气象 → 格点 PM2.5，GBDT v1）
+description: >-
+  以卫星气溶胶光学厚度（AOD）、气象再分析与地面监测站为特征的梯度提升树模型，
+  估算 1 km 格点 PM2.5 年均/月均浓度（ACAG 方法学的轻量复现，用于暴露度分析）。
+  SDG 用途：3.9.1（空气污染死亡）与 11.6.2（城市空气质量）的暴露分量估算。
+tags: [air-quality, pm25, gbdt, exposure, cpu, "sdg:3", "sdg:11"]
+capabilities: [pm25-estimation, pm25-exposure]
+interface:
+  type: inference-http
+  version: "1.0"
+inputs:
+  - {name: aod_grid, type: raster, required: true, description: "AOD 格点（COG/Zarr 引用；MAIAC 或 S5P 融合产品）"}
+  - {name: meteorology, type: object, required: true, description: "ERA5 变量引用 {blh, ws10, t2m, rh, precip}"}
+  - {name: period, type: string, required: true, description: "估算时段 YYYY 或 YYYY-MM"}
+  - {name: bbox, type: array, required: true, description: "[w,s,e,n]"}
+outputs:
+  - {name: pm25_grid, type: raster, description: "1 km PM2.5 浓度栅格（µg/m³；输出契约：声明即必检）"}
+  - {name: cv_metrics, type: object, description: "交叉验证指标 {r2, rmse, n_stations}"}
+runtime:
+  cpu: 8
+  memory: "16Gi"
+  gpu: "none"
+access:
+  protocol: https            # → InferenceProvider
+  endpoint: "http://127.0.0.1:8801/pm25/invoke"   # P2 契约参考服务（surrogate 公式，真读 AOD 栅格）
+  auth: apikey
+provenance:
+  provider: SDGNode
+  source: "方法学参照 ACAG (van Donkelaar et al.)；训练特征源 AOD+ERA5+地面站"
+  lineage: "SDGNode 自训 GBDT v1（LightGBM）；训练数据快照与模型 digest 部署时写入"
+license: "Apache-2.0"
+compliance:
+  sovereignty: local-node
+  restrictions: ["research-use（训练数据含 ACAG 条款时从其约定）"]
+  sensitivity: public
+trust:
+  verified: true      # P2 invoke_model 成功路径实测（check_model_invoke.py T2）；v0=surrogate 公式，地面站验证后升级 GBDT
+  score: 0.7
+"geonexus:sdg":
+  goals: [3, 11]
+  indicators: ["3.9.1", "11.6.2"]
+  custodian: "WHO（3.9.1）/ SDGNode（模型）"
+  unit: "µg/m3"
+  spatial_disaggregation: [grid-1km, city, national]

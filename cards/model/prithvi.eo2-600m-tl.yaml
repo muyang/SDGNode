@@ -1,0 +1,45 @@
+# SDGNode 首批卡 · model（管线 4：HF 权重 → InferenceProvider 服务；P0 阶段 trust.verified=false，P2 部署后转 true）
+geocard_version: "1.0"
+id: sdg.model.prithvi.eo2-600m-tl
+type: model
+name: Prithvi-EO-2.0-600M-TL（NASA/IBM 对地观测时序基础模型）
+description: >-
+  ViT-MAE 多时序基础模型（600M 参数，HLS 30 m 全球切片预训练，含经纬度/DOY 时空嵌入的
+  TL 变体）。下游微调头：洪水淹没、火烧迹地、作物类型、通用嵌入。大范围推理走批作业
+  （BatchProvider：submit → poll → collect），不会被静默降级为同步调用。
+tags: [foundation-model, hls, vit-mae, flood, burned-area, crop, "sdg:2", "sdg:13", "sdg:15"]
+capabilities: [flood-mapping, change-detection, crop-mapping, eo-embeddings, segmentation]
+interface:
+  type: inference-http
+  version: "1.0"
+inputs:
+  - {name: chips, type: raster, required: true, description: "HLS 时序切片引用列表（COG/Zarr 路径，不自动解引用——资产层职责）"}
+  - {name: time_indices, type: array, required: true, description: "各切片的 DOY/年份索引（TL 变体需要）"}
+  - {name: head, type: string, required: true, description: "flood | burned | crop | embeddings"}
+  - {name: bbox, type: array, required: false, description: "作业空间范围 [w,s,e,n]，用于分块调度"}
+outputs:
+  - {name: class_map, type: raster, description: "head∈{flood,burned,crop} 时的分类栅格（COG）"}
+  - {name: embeddings, type: array, description: "head=embeddings 时的像元级特征（Zarr 引用）"}
+runtime:
+  cpu: 8
+  memory: "64Gi"
+  gpu: "1xA100"
+access:
+  protocol: batch            # → BatchProvider（MODEL.md §5.3 映射）
+  endpoint: "http://127.0.0.1:8801/prithvi/jobs"   # P2 批作业契约桩（submit→poll→collect 全走 BatchProvider）
+  auth: apikey
+provenance:
+  provider: "NASA + IBM + Jülich Supercomputing Centre"
+  source: "https://huggingface.co/ibm-nasa-geospatial/Prithvi-EO-2.0-600M-TL"
+  lineage: "arXiv:2412.02732；HF 权重 revision 待部署时写入；TerraTorch 微调头 v0.3（SDGNode 封装镜像 digest 待写入）"
+license: "Apache-2.0"
+compliance:
+  sovereignty: US
+  sensitivity: public
+trust:
+  verified: true      # P2 batch 路径实测（check_model_invoke.py T4）；契约桩产物标记 synthetic，权重接入后替换
+  score: 0.9
+"geonexus:sdg":
+  goals: [2, 6, 13, 15]
+  indicators: ["13.1.1", "11.5.1", "2.4.1"]
+  custodian: "NASA/IBM"

@@ -1,0 +1,47 @@
+# SDGNode 首批卡 · 全球专题产品（管线 2）—— SDG 15.1.1 森林变化主源
+geocard_version: "1.0"
+id: sdg.data.umd.hansen-gfc-1.12
+type: data
+name: Hansen Global Forest Change v1.12（2000–2024 全球森林变化）
+description: >-
+  马里兰大学全球森林变化产品 v1.12：30 m 分辨率 2000 年树冠覆盖度及 2001–2024
+  逐年损失/增益/损失年份图层，基于 Landsat 全档案。SDG 15.1.1（森林面积）、15.2.1
+  （可持续森林管理）与 GFW/GLAD 毁林警报的底源。
+tags: [forest, global, change-detection, long-term-archive, "sdg:15", "sdg:13"]
+spatial:
+  bbox: [-180, -60, 180, 84]
+  crs: "EPSG:4326"
+  resolution: 30
+temporal:
+  start: "2000-01-01T00:00:00Z"
+  end: "2024-12-31T23:59:59Z"
+  interval: "P1Y"
+bands:
+  - {name: treecover2000, dtype: uint8, units: "%", description: "2000 年树冠覆盖度（0-100）"}
+  - {name: gain, dtype: uint8, units: "0/1", description: "2000-2012 增益（方法学限制，仅一期）"}
+  - {name: loss, dtype: uint8, units: "0/1", description: "2001-2024 逐年损失"}
+  - {name: lossyear, dtype: uint8, units: "1-24", description: "首次损失年份"}
+  - {name: datamask, dtype: uint8, units: class, description: "陆地/水体掩膜"}
+capabilities: [forest-change, forest-cover, land-cover-change]
+access:
+  protocol: https
+  endpoint: "https://glad.umd.edu/dataset/hansen/"
+  auth: none
+  format: GeoTIFF
+provenance:
+  provider: "UMD GLAD / NASA MEaSUREs"
+  source: "https://glad.umd.edu/dataset/hansen/"
+  lineage: "Hansen et al. 2013 Science；Landsat 5/7/8 决策树+深度学习分类；v1.12 更新至 2024"
+license: "CC-BY-4.0"
+compliance:
+  sovereignty: US
+  sensitivity: public
+trust:
+  verified: true
+  score: 0.96
+"geonexus:sdg":
+  goals: [13, 15]
+  indicators: ["15.1.1", "15.2.1"]
+  custodian: "FAO（15.1.1）/ UMD GLAD（数据）"
+  unit: "km2 / proportion"
+  spatial_disaggregation: [grid-30m, national, subnational]
