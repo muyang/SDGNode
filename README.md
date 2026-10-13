@@ -149,8 +149,3 @@ netsh advfirewall firewall add rule name="SDGNode Model" dir=in action=allow pro
 5. **可见性继承**：复合案例的有效可见性=min(内容组件)；受限数据引用即降级（404 语义）。
 6. **加法式扩展**：SDG 绑定只走顶层 `geonexus:sdg` 扩展 + 本仓库 Profile Schema，不改 SDK。
 
-## 路线图
-
-✅ P0 首批注册（40 卡 + MCP 发现链实测）→ ✅ P1 数据管线 + 公共算子执行链（端到端 Recipe + GAAG 报告卡）
-→ ✅ P2 模型服务 + invoke 闭环（门禁拒绝零字节外发实测）→ ✅ 平台能力节点接入（注册/自述算力/跨节点委托实证）
-→ P3 指标 Recipe 库扩展 + 报告治理 → P4 机构联邦 + GeoAgent 自然语言端到端。详见技术方案 §9。
